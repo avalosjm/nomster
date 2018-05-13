@@ -5,7 +5,7 @@ class PlacesController < ApplicationController
 		@places = Place.all
 	end
 
-	def new  # thi is the action in that places the form on a page called 'new'
+	def new  # this is the action in that places the form on a page called 'new'
 		@place = Place.new
 	end
 
@@ -19,8 +19,15 @@ class PlacesController < ApplicationController
 	end
 
 	def edit
-			
+		@place = Place.find(params[:id])
+	end
 
+	def update
+		@place = Place.find(params[:id])
+		@place.update_attributes(place_params)
+		redirect_to root_path
+	end
+			
 	private
 
 	def place_params
