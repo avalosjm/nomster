@@ -5,10 +5,10 @@
 	<p><%= @place.description %></p>
 	
      
-  	</head>
-  	<body>
+  </head>
+  <body>
     
-<% if @place.latitude.present? && @place.longitude.present? %>
+  <% if @place.latitude.present? && @place.longitude.present? %>
 
     <script>
 
@@ -34,10 +34,10 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLftv2Zq4QAEF4kS3YJZqQx1XX-Oakc-M&callback=initMap">
     </script>
 
-	<div id="map"></div>
-<% end %>
+    <div id="map"></div>
+  <% end %>
 
-<br />
+  <br />
 
 	<div class="float-right">
 		<% if current_user && current_user == @place.user %>
@@ -45,23 +45,28 @@
 		<%= link_to 'Destroy', place_path(@place), method: :delete, data: {confirm: 'Are you sure you want to delete this?'},class: 'btn btn-danger' %>
 		<% end %>
 	</div>		
+
 </div>
 
 <div class="clear"></div>
-<%= simple_form_for @comment, url: place_comments_path(@place) do |f| %>
-	<%= f.input :message %>
-	<%= f.input :rating %>
-	<%= f.submit "Add a Comment", class: 'btn btn-primary' %>
-<% end %>
+  <%= simple_form_for @comment, url: place_comments_path(@place) do |f| %>
+	 <%= f.input :message %>
+	 <%= f.input :rating, as: :select, collection: Comment::RATINGS %>
+   <%= f.submit "Add a Comment", class: 'btn btn-primary' %>
+  <% end %>
 
-<h1>Comments</h1>
+  <h1>Comments</h1>
 
-<% @place.comments.each do |comment| %>
+  <% @place.comments.each do |comment| %>
+  
   <div>
       <blockquote>
-        <b><%= comment.rating %></b> -
-          <%= comment.message %>
-          <small><%= comment.user.email %></small>
+        <% if comment.humanized_rating.present? %>
+          <b><%= comment.humanized_rating %></b> -
+        <% end %>
+        
+        <%= comment.message %>
+        <small><%= comment.user.email %></small>
       </blockquote>
   </div>
 <% end %>
