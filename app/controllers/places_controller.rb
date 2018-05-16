@@ -5,7 +5,7 @@ class PlacesController < ApplicationController
 		@places = Place.all
 	end
 
-	def new  # this is the action in that places the form on a page called 'new'
+	def new  # this is the action that places the form on a page called 'new'
 		@place = Place.new
 	end
 
@@ -21,6 +21,7 @@ class PlacesController < ApplicationController
 	def show
 		@place = Place.find(params[:id])
 		@comment = Comment.new
+		@photo = Photo.new
 	end
 
 	def edit
