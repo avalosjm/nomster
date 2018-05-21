@@ -20,5 +20,17 @@
 		        </blockquote>
 	    	</div>
     	<% end %>
+
+    	<% if place.photos.present? %>
+			<div class="col-12"> <!-- removed 'col-sm-6' because our blockquote was only filling up half the page. Now, it will fill up the whole section -->
+		        <blockquote>
+		          <% if place.photos.last.present? %>
+		            <b><% place.photos.last %></b>
+		            <%= image_tag place.photos.last.picture %>
+		          <% end %>
+		        </blockquote>
+	    	</div>
+    	<% end %>
+
 	</div>
 <% end %>

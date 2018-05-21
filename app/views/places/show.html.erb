@@ -6,21 +6,30 @@
 	
   </head>
   
-  <!-- lesson 39 -->
-  <h1>Photos</h1>
-    <% @place.photos.each do |photo| %>
-    <div>
-      <blockquote>
-        <%= image_tag photo.picture %> <!-- lesson 39, Making the Image Field Work, step 6 -->
-        <b><%= photo.caption %></b> -
-      </blockquote>
-    </div>
-  <% end %>
-  <!-- lesson 39 -->
+  <!-- on Places page, display pictures, with a button called "Add a Picture" next to it -->
+  <div class="col-10 offset-1"> <!-- putting the below code in between 'divs', adds spacing from the edges of the page -->
+    <h1 class="float-left">Pictures</h1>
+      <% @place.photos.each do |photo| %>
+      
+        <div>
+          <blockquote>
+            <%= image_tag photo.picture %> <!-- lesson 39, Making the Image Field Work, step 6 -->
+            <b><%= photo.caption %></b> -
+          </blockquote>
+        </div>
+      <% end %>
+    
+      <!-- Button triggers modal -->
+      <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myPictureModal">
+        Add a picture
+      </button>
+  </div>
+  <!-- --------------------------------------------------------------------------------- -->
+
 
 
   <body>
-    
+  
   <% if @place.latitude.present? && @place.longitude.present? %>
 
     <script>
@@ -44,7 +53,7 @@
     </script>
     
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLftv2Zq4QAEF4kS3YJZqQx1XX-Oakc-M&callback=initMap">
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLftv2Zq4QAEF4kS3YJZqQx1XX-Oakc-M&callback=initMap">
     </script>
 
     <div id="map"></div>
@@ -61,31 +70,75 @@
 
 </div>
 
-<!-- Modal -->
+
+
+<!-- Modal for adding a Comment -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
+    
     <div class="modal-content">
+      
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
         <h4 class="modal-title" id="myModalLabel">Add a comment</h4>
       </div>
+      
       <%= simple_form_for @comment, url: place_comments_path(@place) do |f| %>
+      
         <div class="modal-body">
           <%= f.input :message %>
           <%= f.input :rating, as: :select, collection: Comment::RATINGS %>
         </div> 
+      
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <%= f.submit "Add a Comment", class: 'btn btn-primary' %>
         </div>  
-
+      
       <% end %>
+    
     </div>
   </div>
 </div>
 
+
+
+<!-- Modal for adding a picture -->
+<div class="modal fade" id="myPictureModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Add a picture</h4>
+      </div>
+      
+      <%= simple_form_for @photo, url: place_photos_path(@place) do |f| %>
+        
+        <div class "modal-body">
+          <%= f.input :caption %>
+          <%= f.input :picture %> <!--# lesson 39 -->
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= f.submit "Add a Picture", class: 'btn btn-primary' %>
+        </div>  
+       
+      <% end %>
+        
+    </div>
+  </div>
+</div>
+<!-- end Modal for adding a picture -->
+
+
+
+<!-- on Places page, display "Comments", with a button called "Add a Comment" next to it -->
 <div class="col-10 offset-1"> <!-- putting the below code in between 'divs', adds spacing from the edges of the page -->
   <h1 class="float-left">Comments</h1>
 
@@ -94,28 +147,26 @@
     Add a comment
   </button>
 </div>
+<!-- end 'on Places page...' -->
 
 <!-- resets the position of the next element -->
 <div class="clear"></div>
 
+<!-- display list of comments -->
 <div class="row"> <!-- adding this 'div' with class 'row' will allow this to show 2 side-by-side, rather than stacked -->
   <% @place.comments.each do |comment| %>
     <div class="col-12 col-sm-6">
-        <blockquote>
-          <% if comment.humanized_rating.present? %>
-            <b><%= comment.humanized_rating %></b> -
-          <% end %>
+      
+      <blockquote>
+      
+        <% if comment.humanized_rating.present? %>
+          <b><%= comment.humanized_rating %></b> -
+        <% end %>
           
-          <%= comment.message %>
-          <small><%= comment.user.email %></small>
-        </blockquote>
-    </div>
-  <% end %>
-</div>
+        <%= comment.message %>
+        <small><%= comment.user.email %></small>
+      </blockquote>
 
-<div class="clear"></div>
-  <%= simple_form_for @photo, url: place_photos_path(@place) do |f| %>
-    <%= f.input :caption %>
-    <%= f.input :picture %> <!--# lesson 39 -->
-    <%= f.submit "Add a Picture", class: 'btn btn-primary' %>
-<% end %>
+    </div>
+  <% end %>    
+</div>
